@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { TaskStatus } from './App.type';
-import { useQuery } from '@tanstack/react-query';
-import { getAllTasks } from './api/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { addNewTask, getAllTasks } from './api/api';
 import Button from './components/Button/Button';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import InputField from './components/InputField/InputField';
@@ -20,15 +20,22 @@ function App() {
   });
 
   const [newTaskName, setNewTaskName] = useState<string>('');
-
   const [sortingType, setSortingType] = useState<SortType>('desc');
+
+  const queryClient = useQueryClient();
 
   const toggleSortingType = () => {
     setSortingType((prevType) => (prevType === 'desc' ? 'asc' : 'desc'));
   };
 
-  const addTask = () => {
-    // TODO: add implementation
+  const addTask = async () => {
+    try {
+      await addNewTask(newTaskName);
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      setNewTaskName('');
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const markAsDone = (id: number) => {

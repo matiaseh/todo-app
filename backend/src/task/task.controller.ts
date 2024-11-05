@@ -12,7 +12,7 @@ export class TaskController {
   }
 
   @Post()
-  addTask(@Body() requestBody: AddTaskDto): void {
+  addTask(@Body() requestBody: AddTaskDto): Task {
     return this.taskService.addTask(requestBody);
   }
 

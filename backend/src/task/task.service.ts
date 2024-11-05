@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { AddTaskDto, Task, TaskStatus, UpdateTaskDto } from './task.type';
 
 @Injectable()
@@ -31,11 +31,29 @@ export class TaskService {
     return this.tasks;
   }
 
-  addTask(task: AddTaskDto): void {
-    console.log('addTask called');
-    // TODO: add implementation, if you chose to implement the backend functionality
+  addTask(task: AddTaskDto): Task {
+    if (
+      !task.name ||
+      typeof task.name !== 'string' ||
+      task.name.trim() === ''
+    ) {
+      throw new BadRequestException(
+        'Task name must be a valid non-empty string.',
+      );
+    }
+
+    const newTask: Task = {
+      id: this.tasks.length + 1,
+      name: task.name,
+      status: TaskStatus.Todo,
+      createdAt: new Date().toISOString(),
+      listId: 1,
+    };
+    this.tasks.push(newTask);
+    return newTask;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateTask(id: number, task: UpdateTaskDto): void {
     console.log('updateTask called');
     // TODO: add implementation, if you chose to implement the backend functionality
