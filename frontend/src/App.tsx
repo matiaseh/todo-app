@@ -1,6 +1,6 @@
-import { useState } from "react";
-import "./App.css";
-import { Task, TaskStatus } from "./App.type";
+import { useState } from 'react';
+import './App.css';
+import { Task, TaskStatus } from './App.type';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTasks } from './api/api';
 
@@ -13,7 +13,7 @@ function App() {
   console.log(data);
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskName, setNewTaskName] = useState<string>("");
+  const [newTaskName, setNewTaskName] = useState<string>('');
 
   const addTask = () => {
     // TODO: add implementation
@@ -27,7 +27,7 @@ function App() {
     // TODO: add implementation
   };
 
-  if (!data) return <>No data found</>
+  if (!data) return <>No data found</>;
 
   return (
     <div>
