@@ -21,6 +21,6 @@ export class TaskController {
     @Param('id') id: number,
     @Body() requestBody: UpdateTaskDto,
   ): void {
-    return this.taskService.updateTask(id, requestBody);
+    return this.taskService.updateTask(Number(id), requestBody);
   }
 }
