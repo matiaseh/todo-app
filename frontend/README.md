@@ -10,6 +10,8 @@ Vite + React + TypeScript based frontend for the ToDo App.
 $ npm i
 ```
 
+Rename `.env.example` to `.env` and use the correct URL for your server
+
 ## Running the project
 
 ```bash
