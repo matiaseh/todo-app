@@ -1,19 +1,31 @@
 import { useState } from 'react';
 import './App.css';
-import { Task, TaskStatus } from './App.type';
+import { TaskStatus } from './App.type';
 import { useQuery } from '@tanstack/react-query';
 import { getAllTasks } from './api/api';
+import Button from './components/Button/Button';
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import InputField from './components/InputField/InputField';
+
+type SortType = 'asc' | 'desc';
 
 function App() {
-  const { data } = useQuery({
+  const {
+    data: tasks,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ['tasks'],
     queryFn: getAllTasks,
   });
 
-  console.log(data);
-
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState<string>('');
+
+  const [sortingType, setSortingType] = useState<SortType>('desc');
+
+  const toggleSortingType = () => {
+    setSortingType((prevType) => (prevType === 'desc' ? 'asc' : 'desc'));
+  };
 
   const addTask = () => {
     // TODO: add implementation
@@ -27,24 +39,41 @@ function App() {
     // TODO: add implementation
   };
 
-  if (!data) return <>No data found</>;
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading tasks</div>;
+  if (!tasks || tasks.length === 0) {
+    return <div>No tasks found</div>;
+  }
+
+  const sortedTasks = [...tasks].sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+
+    return sortingType === 'asc' ? dateA - dateB : dateB - dateA;
+  });
 
   return (
     <div>
       <h2>ToDo App</h2>
       <div className="addNewTask">
-        <input
+        <InputField
           type="text"
           value={newTaskName}
           onChange={(e) => setNewTaskName(e.target.value)}
           placeholder="Add new task"
         />
-        <button onClick={addTask}>Add</button>
+        <Button onClick={addTask}>Add</Button>
+        <Button
+          onClick={toggleSortingType}
+          iconName={sortingType === 'desc' ? faArrowDown : faArrowUp}
+        >
+          Sort
+        </Button>
       </div>
       <h3>Tasks</h3>
       <table className="taskItems">
         <tbody>
-          {data
+          {sortedTasks
             .filter((task) => task.status === TaskStatus.Todo)
             .map((task) => (
               <tr key={task.id}>
@@ -61,7 +90,7 @@ function App() {
       <h3>Done</h3>
       <table className="taskItems">
         <tbody>
-          {tasks
+          {sortedTasks
             .filter((task) => task.status === TaskStatus.Done)
             .map((task) => (
               <tr key={task.id}>
