@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import { TaskStatus } from './App.type';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { addNewTask, getAllTasks } from './api/api';
+import { addNewTask, getAllTasks, updateTaskStatus } from './api/api';
 import Button from './components/Button/Button';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import InputField from './components/InputField/InputField';
@@ -29,21 +29,19 @@ function App() {
   };
 
   const addTask = async () => {
-    try {
-      await addNewTask(newTaskName);
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      setNewTaskName('');
-    } catch (error) {
-      alert(error);
-    }
+    await addNewTask(newTaskName);
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    setNewTaskName('');
   };
 
-  const markAsDone = (id: number) => {
-    // TODO: add implementation
+  const markAsDone = async (id: number) => {
+    await updateTaskStatus(id, TaskStatus.Done);
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
   };
 
-  const markAsUndone = (id: number) => {
-    // TODO: add implementation
+  const markAsUndone = async (id: number) => {
+    await updateTaskStatus(id, TaskStatus.Todo);
+    queryClient.invalidateQueries({ queryKey: ['tasks'] });
   };
 
   if (isLoading) return <div>Loading...</div>;
