@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { AddTaskDto, Task, TaskStatus, UpdateTaskDto } from './task.type';
 
 @Injectable()
@@ -53,9 +57,11 @@ export class TaskService {
     return newTask;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateTask(id: number, task: UpdateTaskDto): void {
-    console.log('updateTask called');
-    // TODO: add implementation, if you chose to implement the backend functionality
+    const taskToUpdate = this.tasks.find((task) => task.id === id);
+    if (!taskToUpdate) {
+      throw new NotFoundException(`Task with ID ${id} not found.`);
+    }
+    taskToUpdate.status = task.status;
   }
 }
