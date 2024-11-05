@@ -1,8 +1,17 @@
 import { useState } from "react";
 import "./App.css";
 import { Task, TaskStatus } from "./App.type";
+import { useQuery } from '@tanstack/react-query';
+import { getAllTasks } from './api/api';
 
 function App() {
+  const { data } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: getAllTasks,
+  });
+
+  console.log(data);
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskName, setNewTaskName] = useState<string>("");
 
@@ -17,6 +26,8 @@ function App() {
   const markAsUndone = (id: number) => {
     // TODO: add implementation
   };
+
+  if (!data) return <>No data found</>
 
   return (
     <div>
@@ -33,7 +44,7 @@ function App() {
       <h3>Tasks</h3>
       <table className="taskItems">
         <tbody>
-          {tasks
+          {data
             .filter((task) => task.status === TaskStatus.Todo)
             .map((task) => (
               <tr key={task.id}>
