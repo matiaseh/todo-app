@@ -11,8 +11,3 @@ div.addNewTask {
   gap: 10px;
   justify-content: center;
 }
-
-table.taskItems {
-  border-spacing: 10px;
-  margin: 0 auto;
-}
