@@ -51,7 +51,7 @@ export class TaskService {
       name: task.name,
       status: TaskStatus.Todo,
       createdAt: new Date().toISOString(),
-      listId: 1,
+      listId: 1, // Put all new tasks into listId 1 for now.
     };
     this.tasks.push(newTask);
     return newTask;
