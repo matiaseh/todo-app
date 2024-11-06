@@ -7,6 +7,7 @@ import { getErrorMessage } from './utils/errorHandler';
 import Button from './components/Button/Button';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import InputField from './components/InputField/InputField';
+import TaskList from './components/TaskList/TaskList';
 
 type SortType = 'asc' | 'desc';
 
@@ -89,39 +90,17 @@ function App() {
         </Button>
       </div>
       <h3>Tasks</h3>
-      <table className="taskItems">
-        <tbody>
-          {sortedTasks
-            .filter((task) => task.status === TaskStatus.Todo)
-            .map((task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-                <td>
-                  <button onClick={() => markAsDone(task.id)}>
-                    Mark as done
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <TaskList
+        tasks={sortedTasks}
+        status={TaskStatus.Todo}
+        onClick={markAsDone}
+      />
       <h3>Done</h3>
-      <table className="taskItems">
-        <tbody>
-          {sortedTasks
-            .filter((task) => task.status === TaskStatus.Done)
-            .map((task) => (
-              <tr key={task.id}>
-                <td>{task.name}</td>
-                <td>
-                  <button onClick={() => markAsUndone(task.id)}>
-                    Mark as undone
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      <TaskList
+        tasks={sortedTasks}
+        status={TaskStatus.Done}
+        onClick={markAsUndone}
+      />
     </div>
   );
 }
