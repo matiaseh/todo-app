@@ -3,7 +3,7 @@ import './App.css';
 import { TaskStatus } from './App.type';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { addNewTask, getAllTasks, updateTaskStatus } from './api/api';
-import { getErrorMessage } from './utils/errorHandler';
+import { handleErrorMessage } from './utils/errorHandler';
 import Button from './components/Button/Button';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import InputField from './components/InputField/InputField';
@@ -36,7 +36,7 @@ function App() {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       setNewTaskName('');
     } catch (error) {
-      getErrorMessage(error);
+      handleErrorMessage(error);
     }
   };
 
@@ -45,7 +45,7 @@ function App() {
       await updateTaskStatus(id, TaskStatus.Done);
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     } catch (error) {
-      getErrorMessage(error);
+      handleErrorMessage(error);
     }
   };
 
@@ -54,7 +54,7 @@ function App() {
       await updateTaskStatus(id, TaskStatus.Todo);
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     } catch (error) {
-      getErrorMessage(error);
+      handleErrorMessage(error);
     }
   };
 
