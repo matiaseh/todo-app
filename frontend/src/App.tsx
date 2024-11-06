@@ -3,6 +3,7 @@ import './App.css';
 import { TaskStatus } from './App.type';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { addNewTask, getAllTasks, updateTaskStatus } from './api/api';
+import { getErrorMessage } from './utils/errorHandler';
 import Button from './components/Button/Button';
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import InputField from './components/InputField/InputField';
@@ -29,19 +30,31 @@ function App() {
   };
 
   const addTask = async () => {
-    await addNewTask(newTaskName);
-    queryClient.invalidateQueries({ queryKey: ['tasks'] });
-    setNewTaskName('');
+    try {
+      await addNewTask(newTaskName);
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      setNewTaskName('');
+    } catch (error) {
+      getErrorMessage(error);
+    }
   };
 
   const markAsDone = async (id: number) => {
-    await updateTaskStatus(id, TaskStatus.Done);
-    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    try {
+      await updateTaskStatus(id, TaskStatus.Done);
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    } catch (error) {
+      getErrorMessage(error);
+    }
   };
 
   const markAsUndone = async (id: number) => {
-    await updateTaskStatus(id, TaskStatus.Todo);
-    queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    try {
+      await updateTaskStatus(id, TaskStatus.Todo);
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    } catch (error) {
+      getErrorMessage(error);
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
