@@ -1,5 +1,6 @@
 import { Task, TaskStatus } from '../../App.type';
 import Button from '../Button/Button';
+import styles from './TaskList.module.scss';
 
 interface TaskListProps {
   tasks: Task[];
@@ -13,7 +14,7 @@ const TaskList = ({ tasks, status, onClick }: TaskListProps) => {
       {tasks.filter((task) => task.status === status).length === 0 ? (
         <p>{`No tasks ${status}`}</p>
       ) : (
-        <table className="taskItems">
+        <table className={styles.taskItems}>
           <tbody>
             {tasks
               .filter((task) => task.status === status)
